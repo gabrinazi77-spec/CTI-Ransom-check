@@ -49,10 +49,18 @@ def fetch_recent_victims(api_url: str = API_URL) -> list[dict[str, Any]]:
 
 def normalize_record(record: dict[str, Any]) -> dict[str, str]:
     """Mantém apenas os campos solicitados, com fallback seguro."""
+    group = str(record.get("group", "") or record.get("group_name", "") or "").strip()
+    date = str(
+        record.get("attackdate", "")
+        or record.get("discovered", "")
+        or record.get("date", "")
+        or ""
+    ).strip()
+
     return {
-        "grupo": str(record.get("group_name", "") or "").strip(),
+        "grupo": group,
         "vitima": str(record.get("victim", "") or "").strip(),
-        "data": str(record.get("date", "") or "").strip(),
+        "data": date,
         "pais": str(record.get("country", "") or "").strip(),
     }
 
